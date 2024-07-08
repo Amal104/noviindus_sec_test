@@ -5,7 +5,6 @@ import 'package:noviindus_sec_test/View/Screens/LoginScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'Provider/Home_Provider.dart';
-import 'View/Screens/AddFeedScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
           useMaterial3: true,
         ),
-        home: UploadPage(),
+        home: const LoginScreen(),
       ),
     );
   }
