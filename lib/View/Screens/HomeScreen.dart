@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:noviindus_sec_test/Provider/Home_Provider.dart';
+import 'package:noviindus_sec_test/View/Screens/UploadScreen.dart';
 import 'package:noviindus_sec_test/View/Widgets/Video_Widget..dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(20.0),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.to(() => UploadPage());
+          },
           backgroundColor: AppColor.red,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(50)),

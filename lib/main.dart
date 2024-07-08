@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:noviindus_sec_test/Provider/AddFeed_Provider.dart';
 import 'package:noviindus_sec_test/Provider/Login_Provider.dart';
 import 'package:noviindus_sec_test/View/Screens/LoginScreen.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => LoginProvider()),
         ChangeNotifierProvider(create: (context) => HomeProvider()),
+        ChangeNotifierProvider(create: (context) => AddfeedProvider()),
       ],
       child: GetMaterialApp(
         title: 'Flutter Demo',
