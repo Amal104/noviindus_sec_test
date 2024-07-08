@@ -1,96 +1,216 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:noviindus_sec_test/Utils/Appcolor.dart';
-import 'package:noviindus_sec_test/Utils/Const_Strings.dart';
+import 'package:intl/intl.dart';
+import 'package:noviindus_sec_test/Provider/Home_Provider.dart';
+import 'package:noviindus_sec_test/View/Widgets/Video_Widget..dart';
+import 'package:provider/provider.dart';
 
-import '../../Utils/Size.dart';
+import '../../Constants/AppURLs.dart';
+import '../../Utils/Appcolor.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        final provider = Provider.of<HomeProvider>(context, listen: false);
+        provider.getHomeData();
+        provider.getCategoryData();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: width(context) * 0.06,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: AppColor.red,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(50)),
+          ),
+          child: const Icon(
+            Icons.add,
+            size: 40,
+            color: AppColor.white,
+          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-
-            SizedBox(
-              height: height(context) * 0.15,
-            ),
-
-            const Text(
-              "Enter Your\nMobile Number",
-              style: TextStyle(
-                color: AppColor.white,
-                fontSize: 25,
-              ),
-            ),
-
-            // Description
-
-            SizedBox(
-              height: height(context) * 0.015,
-            ),
-
-            const Text(
-              ConstStrings.loremipsum,
-              maxLines: 2,
-              style: TextStyle(
-                color: AppColor.grey,
-                fontSize: 15,
-              ),
-            ),
-
-            // Textfied
-
-            SizedBox(
-              height: height(context) * 0.04,
-            ),
-
-            Row(
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Consumer<HomeProvider>(
+            builder: (context, provider, child) => Column(
               children: [
-                Container(
-                  height: height(context) * 0.06,
-                  width: width(context) * 0.15,
-                  decoration: BoxDecoration(
-                    color: AppColor.black,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: AppColor.grey,
-                    ),
+                // Header Sec
+                const Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //Name
+                          Text(
+                            "Hello Amal",
+                            style: TextStyle(
+                              color: AppColor.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          //description
+                          Text(
+                            "Welcome back to section",
+                            style: TextStyle(
+                              color: AppColor.lightgrey,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundImage: NetworkImage(AppUrl.profile),
+                      ),
+                    ],
                   ),
                 ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                //Category
+
                 SizedBox(
-                  width: width(context) * 0.04,
+                  height: 50,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: provider.category.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          provider.onCategoryindexchanged(index);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: AppColor.black,
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(
+                                color: AppColor.grey,
+                              ),
+                            ),
+                            child: Center(
+                                child: Text(
+                              provider.category[index].title,
+                              style: const TextStyle(
+                                color: AppColor.white,
+                                fontSize: 14,
+                              ),
+                            )),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-                Container(
-                  height: height(context) * 0.06,
-                  width: width(context) * 0.66,
-                  decoration: BoxDecoration(
-                    color: AppColor.black,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: AppColor.grey,
-                    ),
-                  ),
-                  child: TextField(
-                    
-                  ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                // Home feed
+
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: provider.home.length,
+                  itemBuilder: (context, index) {
+                    var home = provider.home[index];
+                    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Container(
+                        color: AppColor.lightblack,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(70.0),
+                                child: Row(
+                                  children: [
+                                    const CircleAvatar(
+                                      radius: 100,
+                                      backgroundImage:
+                                          NetworkImage(AppUrl.profile),
+                                    ),
+                                    const SizedBox(
+                                      width: 70,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          home.user.name,
+                                          style: const TextStyle(
+                                            color: AppColor.grey,
+                                            fontSize: 80,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+
+                                        //description
+                                        Text(
+                                          formatter.format(home.createdAt),
+                                          style: const TextStyle(
+                                            color: AppColor.lightgrey,
+                                            fontSize: 40,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Image.network(AppUrl.profile),
+                              Padding(
+                                padding: const EdgeInsets.all(70.0),
+                                child: Text(
+                                  home.description,
+                                  style: const TextStyle(
+                                    color: AppColor.lightgrey,
+                                    fontSize: 40,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
