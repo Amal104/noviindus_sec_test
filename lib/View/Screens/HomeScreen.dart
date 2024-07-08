@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(20.0),
         child: FloatingActionButton(
           onPressed: () {
-            Get.to(() => UploadPage());
+            Get.to(() => AddFeedsPage());
           },
           backgroundColor: AppColor.red,
           shape: const RoundedRectangleBorder(
